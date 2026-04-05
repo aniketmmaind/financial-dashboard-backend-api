@@ -35,7 +35,7 @@ class UserService {
      * Update user
      */
     static async updateUser(id, updates) {
-        const user = await User.findById(id);
+        const user = await User.findByIdAndStatus(id, 'active');
         if (!user) {
             throw { statusCode: 404, message: 'User not found' };
         }
