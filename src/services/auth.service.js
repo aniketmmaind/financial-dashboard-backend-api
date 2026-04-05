@@ -70,7 +70,7 @@ class AuthService {
     /**
      * Get current user profile
      */
-    static async    getProfile(userId) {
+    static async getProfile(userId) {
         const user = await User.findById(userId);
         if (!user) {
             throw { statusCode: 404, message: 'User not found' };

@@ -12,7 +12,7 @@ class User {
         const query = `
       INSERT INTO tbl_users (name, email, password, role, status)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, name, email, role, status, created_at
+      RETURNING id AS user_id, name, email, role, status, created_at
     `;
 
         const values = [name, email, hashedPassword, role, status];
@@ -25,7 +25,7 @@ class User {
      * Find user by ID
      */
     static async findById(id) {
-        const query = 'SELECT id, name, email, role, status, created_at, updated_at FROM tbl_users WHERE id = $1';
+        const query = 'SELECT id AS user_id, name, email, role, status, created_at, updated_at FROM tbl_users WHERE id = $1';
         const result = await db.query(query, [id]);
 
         return result.rows[0];
@@ -45,7 +45,7 @@ class User {
      */
     static async findAll({ page = 1, limit = 10, role = null, status = null }) {
         const offset = (page - 1) * limit;
-        let query = 'SELECT id, name, email, role, status, created_at FROM tbl_users WHERE 1=1';
+        let query = 'SELECT id AS user_id, name, email, role, status, created_at FROM tbl_users WHERE 1=1';
         let countQuery = 'SELECT COUNT(*) FROM tbl_users WHERE 1=1';
         const values = [];
         let paramCount = 1;

@@ -2,6 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const AuthController = require('../controllers/auth.controller');
 const authenticate = require('../middleware/auth');
+const { requireRole } = require('../middleware/validateRole');
 const { authLimiter } = require('../middleware/rateLimiter');
 const { handleValidationErrors } = require('../utils/validation');
 
@@ -10,11 +11,12 @@ const router = express.Router();
 /**
  * @route   POST /api/auth/register
  * @desc    Register a new user
- * @access  Public
+ * @access  Only Admin
  */
 router.post(
     '/register',
     authLimiter,
+    requireRole('admin'),
     [
         body('name')
             .trim()

@@ -69,7 +69,7 @@ class UserController {
         try {
             const { id } = req.params;
             const updates = req.body;
-
+            
             const user = await UserService.updateUser(id, updates);
 
             return success(res, user, 'User updated successfully');

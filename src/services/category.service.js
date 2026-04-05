@@ -12,6 +12,14 @@ class CategoryService {
      * Create category
      */
     static async createCategories(data) {
+
+        //Check whether Category is already exists or not
+        const existCategory = await CategoryModel.getCategoriesByName(data);
+
+        if (existCategory) {
+            throw { statusCode: 409, message: 'Category already exists with this type.' }
+        }
+
         return await CategoryModel.createCategory(data);
     }
 

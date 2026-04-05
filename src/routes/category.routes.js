@@ -3,7 +3,7 @@ const { body, param } = require('express-validator');
 const CategoryController = require('../controllers/category.controller');
 const authenticate = require('../middleware/auth');
 
-const { requireMinimumRole } = require('../middleware/validateRole');
+const { requireRole, requireMinimumRole } = require('../middleware/validateRole');
 const { handleValidationErrors } = require('../utils/validation');
 
 const router = express.Router();
@@ -31,7 +31,7 @@ router.get(
  */
 router.post(
     '/',
-    requireMinimumRole('admin'),
+    requireRole('admin'),
     [
         body('type').notEmpty()
             .withMessage('Type Required'),
@@ -47,7 +47,7 @@ router.post(
  */
 router.put(
     '/:id',
-    requireMinimumRole('admin'),
+    requireRole('admin'),
     [
         param('id')
             .isInt({ min: 1 })
@@ -66,7 +66,7 @@ router.put(
  */
 router.delete(
     '/:id',
-    requireMinimumRole('admin'),
+    requireRole('admin'),
     [
         param('id')
             .isInt({ min: 1 })

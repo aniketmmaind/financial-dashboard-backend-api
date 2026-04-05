@@ -50,7 +50,7 @@ router.get(
     requireRole('admin'),
     [
         param('id')
-            .isInt({ min: 1 })
+            .isUUID()
             .withMessage('Invalid user ID')
     ],
     handleValidationErrors,
@@ -107,7 +107,7 @@ router.put(
     requireRole('admin'),
     [
         param('id')
-            .isInt({ min: 1 })
+            .isUUID()
             .withMessage('Invalid user ID'),
         body('name')
             .optional()
@@ -142,7 +142,7 @@ router.delete(
     requireRole('admin'),
     [
         param('id')
-            .isInt({ min: 1 })
+            .isUUID()
             .withMessage('Invalid user ID')
     ],
     handleValidationErrors,

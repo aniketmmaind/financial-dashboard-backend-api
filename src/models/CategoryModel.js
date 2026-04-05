@@ -1,7 +1,7 @@
 const db = require('../config/database');
 class CategoryModel {
 
-    // ➕ Create Category
+    // Create Category
     static async createCategory({ type }) {
         const query = `
             INSERT INTO tbl_categories (category_type)
@@ -14,16 +14,30 @@ class CategoryModel {
         return result.rows[0];
     }
 
-    // 📥 Get All Categories (default + user-specific)
+    // Get All Categories (default + user-specific)
     static async getCategories() {
         const query = `
-            SELECT *
+            SELECT id, category_type
             FROM tbl_categories
             WHERE status = true
             ORDER BY created_at DESC
         `;
         const result = await db.query(query, []);
         return result.rows;
+    }
+
+    // to check whether category already exists or not
+    static async getCategoriesByName({ type }) {
+
+        const query = `
+            SELECT *
+            FROM tbl_categories
+            WHERE LOWER(category_type) = LOWER($1)
+            AND status = true
+            ORDER BY created_at DESC
+        `;
+        const result = await db.query(query, [type]);
+        return result.rows[0];
     }
 
     // Update Category

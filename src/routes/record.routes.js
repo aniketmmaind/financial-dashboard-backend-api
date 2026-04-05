@@ -2,7 +2,7 @@ const express = require('express');
 const { body, param, query } = require('express-validator');
 const RecordController = require('../controllers/record.controller');
 const authenticate = require('../middleware/auth');
-const { requireMinimumRole } = require('../middleware/validateRole');
+const { requireRole, requireMinimumRole } = require('../middleware/validateRole');
 const { handleValidationErrors } = require('../utils/validation');
 
 const router = express.Router();
@@ -61,8 +61,8 @@ router.get(
     requireMinimumRole('analyst'),
     [
         param('id')
-            .isInt({ min: 1 })
-            .withMessage('Invalid record ID')
+            .isUUID()
+            .withMessage('Invalid Record ID')
     ],
     handleValidationErrors,
     RecordController.getRecordById
@@ -70,18 +70,18 @@ router.get(
 
 /**
  * @route   POST /api/records
- * @desc    Create new financial record For User (Analyst and Admin only)
- * @access  Private - Analyst, Admin
+ * @desc    Create new financial record For Users
+ * @access  Private - Only Admin 
  */
 router.post(
     '/',
-    requireMinimumRole('analyst'),
+    requireRole('admin'),
     [
         body('userId')
             .notEmpty()
             .withMessage('User Id is required')
-            .isFloat({ min: 0.01 })
-            .withMessage('User Id must be a positive number'),
+            .isUUID()
+            .withMessage('Invalied User Id'),
         body('amount')
             .notEmpty()
             .withMessage('Amount is required')
@@ -116,14 +116,14 @@ router.post(
 /**
  * @route   PUT /api/records/:id
  * @desc    Update financial record (Admin only)
- * @access  Private - Admin
+ * @access  Private - Admin Only
  */
 router.put(
     '/:id',
-    requireMinimumRole('admin'),
+    requireRole('admin'),
     [
         param('id')
-            .isInt({ min: 1 })
+            .isUUID()
             .withMessage('Invalid record ID'),
         body('amount')
             .optional()
@@ -155,14 +155,14 @@ router.put(
 /**
  * @route   DELETE /api/records/:id
  * @desc    Delete financial record (Admin only - soft delete)
- * @access  Private - Admin
+ * @access  Private - Admin Only
  */
 router.delete(
     '/:id',
-    requireMinimumRole('admin'),
+    requireRole('admin'),
     [
         param('id')
-            .isInt({ min: 1 })
+            .isUUID()
             .withMessage('Invalid record ID')
     ],
     handleValidationErrors,
@@ -170,5 +170,3 @@ router.delete(
 );
 
 module.exports = router;
-
-// tbl_financial_records_category_id_fkey   (category_id) -> (id)   public.tbl_categories

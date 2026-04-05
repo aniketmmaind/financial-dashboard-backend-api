@@ -9,7 +9,8 @@ class FinancialRecord {
         const query = `
       INSERT INTO tbl_financial_records (user_id,creator_id, amount, type, category_id, date, description)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *
+      RETURNING id AS record_id, user_id, creator_id, category_id, amount,
+        type, date, description, created_at, updated_at
     `;
 
         const values = [userId, creatorId, amount, type, categoryId, date, description || null];
@@ -23,11 +24,21 @@ class FinancialRecord {
      */
     static async findById(id) {
         const query = `SELECT 
-                            t1.id, t1.amount, t1.type, t2.category_type, 
-                            t1.description, t1.date,t1.created_at, t1.updated_at
-                       FROM tbl_financial_records t1, tbl_categories t2 
-                       WHERE t1.category_id= t2.id AND
-                       t1.id = $1 AND t1.is_deleted = false`;
+                        t1.id AS record_id, 
+                        t3.name AS user_name, 
+                        t5.name AS created_by, 
+                        t5.role AS creator_role,
+                        t1.amount::FLOAT AS amount, 
+                        t1.type, 
+                        t2.category_type, 
+                        t1.date, 
+                        t1.description
+                    FROM tbl_financial_records t1
+                    JOIN tbl_categories t2 ON t1.category_id = t2.id
+                    JOIN tbl_users t3 ON t3.id = t1.user_id
+                    LEFT JOIN tbl_users t5 ON t5.id = t1.creator_id 
+                    WHERE t1.id=$1 AND
+                          t1.is_deleted = false`;
         const result = await db.query(query, [id]);
         return result.rows[0];
     }
@@ -46,19 +57,26 @@ class FinancialRecord {
         search = null,
     }) {
         const offset = (page - 1) * limit;
-        let query = `SELECT t1.id, t1.amount, t1.type, t2.category_type,
-                        t1.date, t1.description 
-                        FROM tbl_financial_records t1, tbl_categories t2 
-                        WHERE 
-                            t1.category_id = t2.id AND
-                            is_deleted = false`;
+        let query = `SELECT 
+                        t1.id AS record_id, 
+                        t3.name AS user_name, 
+                        t5.name AS created_by,
+                        t1.amount::FLOAT AS amount, 
+                        t1.type, 
+                        t2.category_type, 
+                        t1.date, 
+                        t1.description
+                    FROM tbl_financial_records t1
+                    JOIN tbl_categories t2 ON t1.category_id = t2.id
+                    JOIN tbl_users t3 ON t3.id = t1.user_id
+                    LEFT JOIN tbl_users t5 ON t5.id = t1.creator_id 
+                    WHERE t1.is_deleted = false`;
         let countQuery = 'SELECT COUNT(t1.*) FROM tbl_financial_records t1, tbl_categories t2 WHERE is_deleted = false';
         const values = [];
         let paramCount = 1;
 
-        // Analysts and Admins see all records (no additional filter)
 
-        // Add other filters
+        // filters
         if (type) {
             query += ` AND t1.type = $${paramCount}`;
             countQuery += ` AND t1.type = $${paramCount}`;
@@ -94,7 +112,7 @@ class FinancialRecord {
             paramCount++;
         }
 
-        // Add pagination
+        // Pagination Added
         query += ` ORDER BY date DESC, t1.created_at DESC LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
         const [records, count] = await Promise.all([
             db.query(query, [...values, limit, offset]),
@@ -138,9 +156,9 @@ class FinancialRecord {
       UPDATE tbl_financial_records 
       SET ${fields.join(', ')}
       WHERE id = $${paramCount} AND is_deleted = false
-      RETURNING *
+      RETURNING id AS record_id, user_id, creator_id, category_id,
+          amount, type, date, description, created_at, updated_at
     `;
-
         const result = await db.query(query, values);
         return result.rows[0];
     }
@@ -176,13 +194,13 @@ class FinancialRecord {
      */
     static async getSummary({ startDate = null, endDate = null, userId = null, userRole = null }) {
         let query = `
-      SELECT 
-        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
-        SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expenses,
-        SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as net_balance,
-        COUNT(*) as total_transactions
-      FROM tbl_financial_records 
-      WHERE is_deleted = false
+        SELECT 
+            COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END),0) as total_income,     
+            COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END),0) as total_expenses,  
+            COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END),0) as net_balance,
+            COUNT(*) as total_transactions
+        FROM tbl_financial_records 
+        WHERE is_deleted = false
     `;
 
         const values = [];
@@ -304,6 +322,7 @@ class FinancialRecord {
         let query = `
       SELECT 
         TO_CHAR(date, 'YYYY-MM') as month,
+        COUNT(*) AS total_transactions,
         SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
         SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expenses
       FROM tbl_financial_records 

@@ -6,31 +6,89 @@ CREATE DATABASE finance_dashboard_db;
 \c finance_dashboard_db;
 
 -- Create tbl_users table
-CREATE TABLE tbl_users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL CHECK (role IN ('viewer', 'analyst', 'admin')),
-    status VARCHAR(50) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS public.tbl_users
+(
+    id integer NOT NULL DEFAULT nextval('tbl_users_id_seq'::regclass),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    role character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    status character varying(50) COLLATE pg_catalog."default" NOT NULL DEFAULT 'active'::character varying,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT tbl_users_pkey PRIMARY KEY (id),
+    CONSTRAINT tbl_users_email_key UNIQUE (email),
+    CONSTRAINT tbl_users_role_check CHECK (role::text = ANY (ARRAY['viewer'::character varying, 'analyst'::character varying, 'admin'::character varying]::text[])),
+    CONSTRAINT tbl_users_status_check CHECK (status::text = ANY (ARRAY['active'::character varying, 'inactive'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.tbl_users
+    OWNER to postgres;
+
+CREATE INDEX IF NOT EXISTS idx_users_email
+    ON public.tbl_users USING btree
+    (email COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_users_role
+    ON public.tbl_users USING btree
+    (role COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
 
 -- Create tbl_financial_records table
-CREATE TABLE tbl_financial_records (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES tbl_users(id) ON DELETE CASCADE,
-    creator_id INTEGER,
-    amount DECIMAL(15, 2) NOT NULL,
-    type VARCHAR(50) NOT NULL CHECK (type IN ('income', 'expense')),
-    category VARCHAR(100) NOT NULL,
-    date DATE NOT NULL,
-    description TEXT,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+
+CREATE TABLE IF NOT EXISTS public.tbl_financial_records
+(
+    id integer NOT NULL DEFAULT nextval('tbl_financial_records_id_seq1'::regclass),
+    user_id integer,
+    creator_id integer,
+    amount numeric(15,2) NOT NULL,
+    type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    date date NOT NULL,
+    description text COLLATE pg_catalog."default",
+    is_deleted boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    category_id integer,
+    CONSTRAINT tbl_financial_records_pkey1 PRIMARY KEY (id),
+    CONSTRAINT tbl_financial_records_category_id_fkey FOREIGN KEY (category_id)
+        REFERENCES public.tbl_categories (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT tbl_financial_records_user_id_fkey1 FOREIGN KEY (user_id)
+        REFERENCES public.tbl_users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT tbl_financial_records_type_check1 CHECK (type::text = ANY (ARRAY['income'::character varying, 'expense'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.tbl_financial_records
+    OWNER to postgres;
+
+
+-- Create tbl_categories
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_categories
+(
+    id integer NOT NULL DEFAULT nextval('tbl_categories_id_seq'::regclass),
+    category_type character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    status boolean DEFAULT true,
+    created_at date DEFAULT CURRENT_TIMESTAMP,
+    updated_at date DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT tbl_categories_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.tbl_categories
+    OWNER to postgres;
 
 -- Create indexes for better query performance
 CREATE INDEX idx_users_email ON tbl_users(email);
