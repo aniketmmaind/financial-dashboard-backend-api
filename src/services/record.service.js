@@ -1,4 +1,5 @@
 const FinancialRecord = require('../models/FinancialRecord');
+const User = require('../models/User');
 
 class RecordService {
     /**
@@ -23,6 +24,12 @@ class RecordService {
      * Create new record
      */
     static async createRecord(recordData) {
+        //Check whether Category is already exists or not
+        const isUserDeleted = await User.findByIdAndStatus(recordData.userId, 'deleted');
+
+        if (isUserDeleted) {
+            throw { statusCode: 409, message: 'User Not Found' }
+        }
         return await FinancialRecord.create(recordData);
     }
 

@@ -32,6 +32,16 @@ class User {
     }
 
     /**
+     * Find user by ID and status
+     */
+    static async findByIdAndStatus(id, status) {
+        const query = 'SELECT * FROM tbl_users WHERE id = $1 AND status = $2';
+       const result = await db.query(query, [id, status]);
+
+        return result.rows[0];
+    }
+
+    /**
      * Find user by email (includes password for authentication)
      */
     static async findByEmail(email) {
@@ -116,10 +126,10 @@ class User {
     }
 
     /**
-     * Delete user
+     * Delete user (Soft)
      */
     static async delete(id) {
-        const query = 'DELETE FROM tbl_users WHERE id = $1 RETURNING id';
+        const query = `UPDATE tbl_users SET status = 'deleted'  WHERE id = $1 RETURNING id`;
         const result = await db.query(query, [id]);
 
         return result.rows[0];

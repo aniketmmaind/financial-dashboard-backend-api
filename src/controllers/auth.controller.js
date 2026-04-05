@@ -3,21 +3,6 @@ const { success, error } = require('../utils/response');
 
 class AuthController {
     /**
-     * Register new user
-     */
-    static async register(req, res, next) {
-        try {
-            const { name, email, password, role } = req.body;
-
-            const result = await AuthService.register({ name, email, password, role });
-
-            return success(res, result, 'User registered successfully', 201);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    /**
      * Login user
      */
     static async login(req, res, next) {

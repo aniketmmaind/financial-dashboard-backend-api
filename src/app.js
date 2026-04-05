@@ -49,8 +49,8 @@ app.listen(port, () => {
     console.log('='.repeat(50));
     console.log(`Server running in ${nodeEnv} mode`);
     console.log(`Listening on port ${port}`);
-    console.log(`API URL: http://localhost:${port}/api`);
-    console.log(`Health check: http://localhost:${port}/health`);
+    // console.log(`API URL: http://localhost:${port}/api`);
+    // console.log(`Health check: http://localhost:${port}/health`);
     console.log('='.repeat(50));
 });
 

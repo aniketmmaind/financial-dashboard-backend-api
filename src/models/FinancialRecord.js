@@ -42,6 +42,7 @@ class FinancialRecord {
         const result = await db.query(query, [id]);
         return result.rows[0];
     }
+    
 
     /**
      * Get all records with filters and pagination

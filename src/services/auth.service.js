@@ -5,25 +5,6 @@ const { jwtSecret, jwtExpiresIn } = require('../config/env');
 
 class AuthService {
     /**
-     * Register a new user
-     */
-    static async register({ name, email, password, role = 'viewer' }) {
-        // Check if user already exists
-        const existingUser = await User.findByEmail(email);
-        if (existingUser) {
-            throw { statusCode: 409, message: 'User already exists with this email' };
-        }
-
-        // Create new user
-        const user = await User.create({ name, email, password, role });
-
-        // Generate token
-        const token = this.generateToken(user);
-
-        return { user, token };
-    }
-
-    /**
      * Login user
      */
     static async login({ email, password }) {
