@@ -11,6 +11,7 @@ A robust and scalable RESTful API for managing financial records with role-based
 - [Installation](#installation)
 - [Database Setup](#database-setup)
 - [Environment Configuration](#environment-configuration)
+- [Live API](#live-api)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Role-Based Access Control](#role-based-access-control)
@@ -219,21 +220,23 @@ Expected response:
 
 ---
 
-## 🚀 Live API
+## Live API
 
 🔗 Base URL:
+
 ```bash
 https://zorvyn-financial-dashboard-backend-api.onrender.com
 ```
 
 🔗 Health Check:
+
 ```bash
 https://zorvyn-financial-dashboard-backend-api.onrender.com/health
 ```
+
 > ⚠️ > ⚠️ Note: The API is hosted on Render's free tier. The first request may take 30–60 seconds to respond due to cold start.
 
 ---
-
 
 ## Project Structure
 
@@ -285,7 +288,11 @@ finance-dashboard-backend/
 
 ---
 
-## API Documentation
+## API Documentation (Postman Collection)
+
+[API Documentation Collection](https://documenter.getpostman.com/view/53365826/2sBXiqEp2v#ffcd2b75-390f-4a5a-8097-bbf0da9f009b)
+
+---
 
 ### Base URL
 
@@ -408,20 +415,6 @@ Authorization: Bearer <your_jwt_token>
 ## API Endpoints Reference
 
 ### 🔐 Authentication Endpoints
-
-#### Register User
-
-```http
-POST /api/auth/register
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123",
-  "role": "viewer"
-}
-```
 
 #### Login
 
