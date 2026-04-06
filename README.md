@@ -12,7 +12,7 @@ A robust and scalable RESTful API for managing financial records with role-based
 - [Database Setup](#database-setup)
 - [Environment Configuration](#environment-configuration)
 - [Live API](#live-api)
-- [Project Structure](#project-structure)
+- [Project Structure](#project-structure-(postman-collection))
 - [API Documentation](#api-documentation)
 - [Role-Based Access Control](#role-based-access-control)
 - [API Endpoints Reference](#api-endpoints-reference)
