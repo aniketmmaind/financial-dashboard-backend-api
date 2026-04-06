@@ -667,6 +667,7 @@ All dashboard endpoints are accessible to authenticated users. Data is filtered 
 4. **No File Uploads**: Text-only data
 5. **English Only**: No i18n
 6. **Email as Username**: No separate username field
+7. **creator_id**: Added for future scenarios where multiple authorized users can create and manage financial records, enabling proper ownership tracking.
 
 ---
 

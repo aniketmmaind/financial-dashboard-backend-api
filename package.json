@@ -4,8 +4,8 @@
   "description": "Finance Dashboard Backend API with Role-Based Access Control",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node init && node src/app.js",
+    "dev": "node init && nodemon src/app.js",
     "init-db": "psql -U postgres -f database/init.sql"
   },
   "keywords": [
