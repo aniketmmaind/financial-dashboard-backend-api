@@ -234,7 +234,7 @@ https://zorvyn-financial-dashboard-backend-api.onrender.com
 https://zorvyn-financial-dashboard-backend-api.onrender.com/health
 ```
 
-> ⚠️ > ⚠️ Note: The API is hosted on Render's free tier. The first request may take 30–60 seconds to respond due to cold start.
+> ⚠️ Note: The API is hosted on Render's free tier. The first request may take 30–60 seconds to respond due to cold start.
 
 ---
 
@@ -288,9 +288,9 @@ finance-dashboard-backend/
 
 ---
 
-## API Documentation (Postman Collection)
+## API Documentation
 
-[API Documentation Collection](https://documenter.getpostman.com/view/53365826/2sBXiqEp2v#ffcd2b75-390f-4a5a-8097-bbf0da9f009b)
+[API Documentation Postman Collection](https://documenter.getpostman.com/view/53365826/2sBXiqEp2v#ffcd2b75-390f-4a5a-8097-bbf0da9f009b)
 
 ---
 
