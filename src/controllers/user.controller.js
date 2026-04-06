@@ -63,7 +63,7 @@ class UserController {
     }
 
     /**
-     * Update user
+     * Update user by id
      */
     static async updateUser(req, res, next) {
         try {
@@ -79,7 +79,7 @@ class UserController {
     }
 
     /**
-     * Delete user
+     * Delete user by id
      */
     static async deleteUser(req, res, next) {
         try {

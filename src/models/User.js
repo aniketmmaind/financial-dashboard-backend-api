@@ -36,13 +36,13 @@ class User {
      */
     static async findByIdAndStatus(id, status) {
         const query = 'SELECT * FROM tbl_users WHERE id = $1 AND status = $2';
-       const result = await db.query(query, [id, status]);
+        const result = await db.query(query, [id, status]);
 
         return result.rows[0];
     }
 
     /**
-     * Find user by email (includes password for authentication)
+     * Find user by email
      */
     static async findByEmail(email) {
         const query = 'SELECT * FROM tbl_users WHERE email = $1';

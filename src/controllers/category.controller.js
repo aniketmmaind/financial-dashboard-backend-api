@@ -3,8 +3,7 @@ const { success } = require('../utils/response');
 
 class CategoryController {
     /**
-     * Get Categories
-     * All authenticated user access this
+     * Get All Categories
      */
     static async getCategory(req, res, next) {
         try {
@@ -35,7 +34,7 @@ class CategoryController {
 
     /**
      * Update Category
-     * Only admin can update categories
+     * Only admin can update categories by id
      */
     static async updateCategory(req, res, next) {
         try {
@@ -51,8 +50,8 @@ class CategoryController {
     }
 
     /**
-     * DeleteCategory
-     * Only admin can delete categories
+     * DeleteCategory (Soft Delete)
+     * Only admin can delete categories by id
      */
     static async deleteCategory(req, res, next) {
         try {

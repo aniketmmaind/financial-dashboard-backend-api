@@ -45,8 +45,6 @@ class DashboardService {
 
         const commonFilters = { startDate, endDate, userId, userRole };
         const [summary, categoryBreakdown, recentActivity, monthlyTrends] = await Promise.all([
-
-
             this.getSummary(commonFilters),
             this.getCategoryBreakdown({ ...commonFilters, type }),
             this.getRecentActivity({ resLimit, userId, userRole }),

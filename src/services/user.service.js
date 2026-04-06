@@ -35,6 +35,8 @@ class UserService {
      * Update user
      */
     static async updateUser(id, updates) {
+
+        // first check status if active then proceed
         const user = await User.findByIdAndStatus(id, 'active');
         if (!user) {
             throw { statusCode: 404, message: 'User not found' };
@@ -52,10 +54,12 @@ class UserService {
     }
 
     /**
-     * Delete user
+     * Delete user by id
      */
     static async deleteUser(id) {
+        // check user exists or not
         const user = await User.findById(id);
+
         if (!user) {
             throw { statusCode: 404, message: 'User not found' };
         }

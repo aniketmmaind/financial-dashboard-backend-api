@@ -11,7 +11,7 @@ const router = express.Router();
 /**
  * @route   POST /api/auth/login
  * @desc    Login user
- * @access  Public
+ * @access  Public Viewer, Analyst, Admin
  */
 router.post(
     '/login',

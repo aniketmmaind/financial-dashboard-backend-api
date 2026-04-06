@@ -4,7 +4,7 @@ const { success, error, paginated } = require('../utils/response');
 class RecordController {
     /**
      * Get all records
-     * Role-based: Viewers see only their records, Analysts/Admins see all
+     * Role-based: Analysts, Admins see all
      */
     static async getAllRecords(req, res, next) {
         try {

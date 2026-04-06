@@ -12,8 +12,7 @@ router.use(authenticate);
 
 /**
  * @route   GET /api/records
- * @desc    Get all financial records with filters (All authenticated users)
- *          Analyst fetch Data Based on their ID to creator_id column                
+ * @desc    Get all financial records with filters (authenticated users)              
  * @access  Private - Analyst, Admin
  */
 router.get(

@@ -15,7 +15,7 @@ router.use(authenticate);
 /**
  * @route   GET /api/category/
  * @desc    Get List of Categories
- * @access  Private - All authenticated users
+ * @access  Private - Analyst, Admin
  */
 router.get(
     '/',
