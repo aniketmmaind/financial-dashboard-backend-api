@@ -14,13 +14,13 @@ class CategoryModel {
         return result.rows[0];
     }
 
-    // Get All Categories (default + user-specific)
+    // Get All Categories
     static async getCategories() {
         const query = `
             SELECT id, category_type
-            FROM tbl_categories
+                FROM tbl_categories
             WHERE status = true
-            ORDER BY created_at DESC
+            ORDER BY id ASC
         `;
         const result = await db.query(query, []);
         return result.rows;
@@ -60,7 +60,7 @@ class CategoryModel {
             UPDATE tbl_categories
             SET status = false
             WHERE id = $1
-            RETURNING *
+            RETURNING id
         `;
         const result = await db.query(query, [id]);
         return result.rows[0];

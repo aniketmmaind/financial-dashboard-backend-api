@@ -2,7 +2,7 @@ const CategoryModel = require('../models/CategoryModel');
 
 class CategoryService {
     /**
-     * Get overall Categories
+     * Get all Categories
      */
     static async getCategories(filters) {
         return await CategoryModel.getCategories(filters);
@@ -24,14 +24,14 @@ class CategoryService {
     }
 
     /**
-     * Get recent activity
+     * Update Category Type
      */
     static async updateCategory(data) {
         return await CategoryModel.updateCategory(data);
     }
 
     /**
-     * Get monthly trends
+     * Delete (soft) category
      */
     static async deleteCategory(id) {
         return await CategoryModel.deleteCategory(id);
