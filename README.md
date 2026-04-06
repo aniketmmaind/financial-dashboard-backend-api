@@ -11,6 +11,7 @@ A robust and scalable RESTful API for managing financial records with role-based
 - [Installation](#installation)
 - [Database Setup](#database-setup)
 - [Environment Configuration](#environment-configuration)
+- [Live API](#live-api)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Role-Based Access Control](#role-based-access-control)
@@ -219,7 +220,7 @@ Expected response:
 
 ---
 
-## 🚀 Live API
+## Live API
 
 🔗 Base URL:
 ```bash
