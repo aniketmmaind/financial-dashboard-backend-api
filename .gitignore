@@ -18,3 +18,9 @@ Thumbs.db
 *.swp
 *.swo
 config.bat
+
+.vscode
+public/fonts
+public
+init
+init.js
